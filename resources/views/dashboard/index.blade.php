@@ -169,61 +169,84 @@
     <!-- Dashboard Header -->
     <div class="dashboard-header">
         <h1><i class="fas fa-chart-line"></i> IT Project Management</h1>
-        <p>Welcome, {{ auth()->user()->name }}! Here's an overview of your projects.</p>
+        <p>Welcome, {{ auth()->user()->name }}! Manage your projects below.</p>
     </div>
 
-    <!-- Statistics -->
+    <!-- Project Actions -->
     <div class="row mb-4">
-        <div class="col-md-3 col-sm-6">
-            <div class="stat-card">
-                <i class="fas fa-folder-open" style="color: #3498db;"></i>
-                <div class="number">0</div>
-                <div class="label">Total Projects</div>
-            </div>
-        </div>
-        <div class="col-md-3 col-sm-6">
-            <div class="stat-card">
-                <i class="fas fa-hourglass-half" style="color: #f39c12;"></i>
-                <div class="number">0</div>
-                <div class="label">In Progress</div>
-            </div>
-        </div>
-        <div class="col-md-3 col-sm-6">
-            <div class="stat-card">
-                <i class="fas fa-check-circle" style="color: #27ae60;"></i>
-                <div class="number">0</div>
-                <div class="label">Completed</div>
-            </div>
-        </div>
-        <div class="col-md-3 col-sm-6">
-            <div class="stat-card">
-                <i class="fas fa-users" style="color: #e74c3c;"></i>
-                <div class="number">0</div>
-                <div class="label">Team Members</div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Projects Section -->
-    <div class="row">
-        <div class="col-12">
-            <div style="background: white; border-radius: 10px; padding: 30px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
-                    <h2 style="margin: 0; color: #2c3e50;">Recent Projects</h2>
-                    <button class="btn-add-project" data-bs-toggle="modal" data-bs-target="#addProjectModal">
-                        <i class="fas fa-plus"></i> New Project
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body text-center">
+                    <i class="fas fa-folder-plus" style="font-size: 3rem; color: #3498db;"></i>
+                    <h4 class="mt-3">Create New Project</h4>
+                    <p class="text-muted">Create a new project and get a unique access code</p>
+                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createProjectModal">
+                        <i class="fas fa-plus"></i> Create Project
                     </button>
                 </div>
-
-                <!-- Empty State -->
-                <div class="empty-state">
-                    <i class="fas fa-inbox"></i>
-                    <h3>No Projects Yet</h3>
-                    <p>Get started by creating your first project. Click the "New Project" button to begin!</p>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body text-center">
+                    <i class="fas fa-key" style="font-size: 3rem; color: #27ae60;"></i>
+                    <h4 class="mt-3">Enter Project Code</h4>
+                    <p class="text-muted">View a project using its unique code</p>
+                    <form id="accessProjectForm" class="d-flex gap-2 justify-content-center">
+                        <input type="text" class="form-control" id="projectCode" placeholder="e.g., 001" maxlength="3" style="width: 120px;">
+                        <button type="button" class="btn btn-success" onclick="accessProject()">
+                            <i class="fas fa-sign-in-alt"></i> Access
+                        </button>
+                    </form>
                 </div>
+            </div>
+        </div>
+    </div>
 
-                <!-- Projects will be displayed here -->
-                <div id="projectsList"></div>
+    <!-- Project View (hidden until code is entered) -->
+    <div class="row" id="projectViewSection" style="display: none;">
+        <div class="col-12">
+            <div style="background: white; border-radius: 10px; padding: 30px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <h2 style="margin: 0; color: #2c3e50;" id="projectTitle">Project Details</h2>
+                    <button class="btn btn-outline-secondary" onclick="closeProjectView()">
+                        <i class="fas fa-times"></i> Close
+                    </button>
+                </div>
+                <div id="projectDetails"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Create Project Modal -->
+<div class="modal fade" id="createProjectModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Create New Project</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="createProjectForm">
+                    <div class="mb-3">
+                        <label for="projectName" class="form-label">Project Name</label>
+                        <input type="text" class="form-control" id="projectName" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="projectDescription" class="form-label">Description</label>
+                        <textarea class="form-control" id="projectDescription" rows="3"></textarea>
+                    </div>
+                </form>
+                <div id="projectCodeDisplay" class="text-center p-3" style="display: none; background: #f8f9fa; border-radius: 5px;">
+                    <p class="mb-2">Your Project Code:</p>
+                    <h2 class="mb-0" id="generatedCode" style="color: #3498db; font-size: 2.5rem;"></h2>
+                    <p class="text-muted small mt-2">Save this code to access your project later</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="closeModalBtn">Close</button>
+                <button type="button" class="btn btn-primary" onclick="createProject()" id="createBtn">Create Project</button>
             </div>
         </div>
     </div>
@@ -247,120 +270,93 @@
                         <label for="projectDescription" class="form-label">Description</label>
                         <textarea class="form-control" id="projectDescription" rows="3"></textarea>
                     </div>
-                    <div class="mb-3">
-                        <label for="projectStatus" class="form-label">Status</label>
-                        <select class="form-control" id="projectStatus">
-                            <option value="pending">Pending</option>
-                            <option value="active">Active</option>
-                            <option value="completed">Completed</option>
-                        </select>
-                    </div>
-                    <div class="mb-3">
-                        <label for="projectDeadline" class="form-label">Deadline</label>
-                        <input type="date" class="form-control" id="projectDeadline">
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-primary" onclick="addProject()">Create Project</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-@endsection
-
 @section('js')
 <script>
-    // Sample projects for demonstration
-    const projects = [];
+    let projects = [];
+    let projectCounter = 0;
 
-    function displayProjects() {
-        const projectsList = document.getElementById('projectsList');
-        
-        if (projects.length === 0) {
-            projectsList.innerHTML = `
-                <div class="empty-state">
-                    <i class="fas fa-inbox"></i>
-                    <h3>No Projects Yet</h3>
-                    <p>Get started by creating your first project. Click the "New Project" button to begin!</p>
-                </div>
-            `;
-            return;
-        }
-
-        let html = '';
-        projects.forEach((project, index) => {
-            const statusClass = `status-${project.status}`;
-            html += `
-                <div class="project-card">
-                    <div style="display: flex; justify-content: space-between; align-items: start;">
-                        <div style="flex: 1;">
-                            <h5>${project.name}</h5>
-                            <p style="color: #7f8c8d; margin-bottom: 10px;">${project.description}</p>
-                            <div class="progress">
-                                <div class="progress-bar" style="width: ${Math.random() * 100}%"></div>
-                            </div>
-                            <div style="display: flex; justify-content: space-between; align-items: center;">
-                                <span class="${statusClass}">${project.status.charAt(0).toUpperCase() + project.status.slice(1)}</span>
-                                ${project.deadline ? `<small style="color: #7f8c8d;"><i class="fas fa-calendar"></i> ${project.deadline}</small>` : ''}
-                            </div>
-                        </div>
-                        <div style="margin-left: 20px;">
-                            <button class="btn btn-sm btn-outline-primary" onclick="editProject(${index})">
-                                <i class="fas fa-edit"></i>
-                            </button>
-                            <button class="btn btn-sm btn-outline-danger" onclick="deleteProject(${index})">
-                                <i class="fas fa-trash"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            `;
-        });
-
-        projectsList.innerHTML = html;
+    function generateCode() {
+        projectCounter++;
+        return projectCounter.toString().padStart(3, '0');
     }
 
-    function addProject() {
+    
+
+    function createProject() {
         const name = document.getElementById('projectName').value;
         const description = document.getElementById('projectDescription').value;
-        const status = document.getElementById('projectStatus').value;
-        const deadline = document.getElementById('projectDeadline').value;
 
         if (!name) {
             alert('Please enter a project name');
             return;
         }
 
+        const code = generateCode();
+        
         projects.push({
+            code: code,
             name: name,
-            description: description,
-            status: status,
-            deadline: deadline
+            description: description
         });
 
-        // Reset form and close modal
-        document.getElementById('addProjectForm').reset();
-        bootstrap.Modal.getInstance(document.getElementById('addProjectModal')).hide();
+        document.getElementById('generatedCode').textContent = code;
+        document.getElementById('projectCodeDisplay').style.display = 'block';
+        document.getElementById('createBtn').style.display = 'none';
+        document.getElementById('closeModalBtn').textContent = 'Done';
 
-        // Display projects
         displayProjects();
     }
 
-    function editProject(index) {
-        alert('Edit functionality can be implemented');
-    }
-
-    function deleteProject(index) {
+    function deleteProject(code) {
         if (confirm('Are you sure you want to delete this project?')) {
-            projects.splice(index, 1);
+            projects = projects.filter(p => p.code !== code);
             displayProjects();
         }
     }
 
-    // Initialize
-    displayProjects();
+    function accessProject() {
+        const code = document.getElementById('projectCode').value.trim();
+        
+        if (!code) {
+            alert('Please enter a project code');
+            return;
+        }
+
+        const project = projects.find(p => p.code === code);
+        
+        if (project) {
+            document.getElementById('projectTitle').textContent = project.name;
+            document.getElementById('projectDetails').innerHTML = `
+                <div class="text-center">
+                    <span style="background: #3498db; color: white; padding: 8px 15px; border-radius: 5px; font-weight: bold; font-size: 1.2rem;">Code: ${project.code}</span>
+                </div>
+                <div class="mt-4">
+                    <p><strong>Description:</strong></p>
+                    <p style="color: #7f8c8d;">${project.description || 'No description provided.'}</p>
+                </div>
+                <div class="mt-3">
+                    <button class="btn btn-outline-danger" onclick="deleteProject('${project.code}')">
+                        <i class="fas fa-trash"></i> Delete Project
+                    </button>
+                </div>
+            `;
+            document.getElementById('projectViewSection').style.display = 'block';
+            document.getElementById('projectViewSection').scrollIntoView({ behavior: 'smooth' });
+        } else {
+            alert('Project not found with code: ' + code);
+        }
+    }
+
+    function closeProjectView() {
+        document.getElementById('projectViewSection').style.display = 'none';
+        document.getElementById('projectCode').value = '';
+    }
+
+    document.getElementById('createProjectModal').addEventListener('hidden.bs.modal', function() {
+        document.getElementById('createProjectForm').reset();
+        document.getElementById('projectCodeDisplay').style.display = 'none';
+        document.getElementById('createBtn').style.display = 'block';
+        document.getElementById('closeModalBtn').textContent = 'Close';
+    });
 </script>
 @endsection
