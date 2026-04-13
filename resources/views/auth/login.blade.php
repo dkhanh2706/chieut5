@@ -1,73 +1,75 @@
 @extends('layouts.app')
 
-@section('title', 'Login - IT Project Management')
+@section('title', 'Đăng nhập - IT Project Management')
 
 @section('content')
 <div class="container-main">
-    <div style="width: 100%; max-width: 500px;">
-        <div class="card">
-            <div class="card-body p-5">
-                <div class="text-center mb-4">
-                    <i class="fas fa-sign-in-alt" style="font-size: 3rem; color: #3498db;"></i>
-                    <h2 class="mt-3" style="color: #2c3e50;">Welcome Back</h2>
-                    <p class="text-muted">Sign in to your IT Project Management account</p>
-                </div>
-
-                @if ($errors->any())
-                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                        <strong><i class="fas fa-exclamation-circle"></i> Login Failed!</strong>
-                        @foreach ($errors->all() as $error)
-                            <div>{{ $error }}</div>
-                        @endforeach
-                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                    </div>
-                @endif
-
-                <form action="/login" method="POST">
-                    @csrf
-
-                    <div class="mb-3">
-                        <label for="email" class="form-label">Email Address</label>
-                        <input type="email" class="form-control @error('email') is-invalid @enderror" 
-                               id="email" name="email" value="{{ old('email') }}" required autofocus>
-                        @error('email')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="password" class="form-label">Password</label>
-                        <input type="password" class="form-control @error('password') is-invalid @enderror" 
-                               id="password" name="password" required>
-                        @error('password')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                    </div>
-
-                    <div class="mb-3">
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="remember" name="remember">
-                            <label class="form-check-label" for="remember">
-                                Remember me
-                            </label>
-                        </div>
-                    </div>
-
-                    <button type="submit" class="btn btn-primary w-100 py-2 mb-3">
-                        <i class="fas fa-sign-in-alt"></i> Sign In
-                    </button>
-                </form>
-
-                <div class="text-center mb-3">
-                    <a href="/forgot-password" class="forgot-link">Forgot your password?</a>
-                </div>
-
-                <hr>
-
-                <p class="text-center already-member">
-                    Don't have an account? <a href="/register" class="forgot-link" style="font-weight: bold;">Register here</a>
-                </p>
+    <div class="auth-card fade-in-up">
+        <div class="card-body">
+            <div class="auth-header">
+                <i class="fas fa-sign-in-alt"></i>
+                <h2>Chào mừng trở lại</h2>
+                <p>Đăng nhập vào tài khoản của bạn</p>
             </div>
+
+            @if($errors->any())
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <i class="fas fa-exclamation-circle me-2"></i>
+                    <strong>Đăng nhập thất bại!</strong>
+                    @foreach($errors->all() as $error)
+                        <div>{{ $error }}</div>
+                    @endforeach
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            @endif
+
+            <form action="/login" method="POST">
+                @csrf
+
+                <div class="mb-4">
+                    <label for="email" class="form-label">Địa chỉ email</label>
+                    <input type="email" class="form-control @error('email') is-invalid @enderror" 
+                           id="email" name="email" value="{{ old('email') }}" required autofocus
+                           placeholder="name@example.com">
+                    @error('email')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
+
+                <div class="mb-4">
+                    <label for="password" class="form-label">Mật khẩu</label>
+                    <input type="password" class="form-control @error('password') is-invalid @enderror" 
+                           id="password" name="password" required
+                           placeholder="Nhập mật khẩu">
+                    @error('password')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
+
+                <div class="mb-4">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="remember" name="remember">
+                        <label class="form-check-label" for="remember">
+                            Ghi nhớ đăng nhập
+                        </label>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary w-100 py-3 mb-4">
+                    <i class="fas fa-sign-in-alt me-2"></i> Đăng nhập
+                </button>
+            </form>
+
+            <div class="auth-footer">
+                <a href="/forgot-password" class="forgot-link">Quên mật khẩu?</a>
+            </div>
+
+            <hr class="my-4">
+
+            <p class="text-center mb-0">
+                Chưa có tài khoản? 
+                <a href="/register" class="forgot-link">Đăng ký ngay</a>
+            </p>
         </div>
     </div>
 </div>

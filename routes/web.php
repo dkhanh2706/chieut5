@@ -34,6 +34,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/projects/create', [ProjectController::class, 'create'])->name('projects.create');
     Route::post('/projects', [ProjectController::class, 'store'])->name('projects.store');
 
+    // 🔥 TRUY CẬP PROJECT BẰNG MÃ
+    Route::get('/projects/access', [ProjectController::class, 'access'])->name('projects.access');
+
     // 🔥 CHI TIẾT PROJECT (QUAN TRỌNG)
     Route::get('/projects/{id}', [ProjectController::class, 'show'])->name('projects.show');
 

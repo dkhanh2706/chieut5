@@ -107,6 +107,25 @@ class ProjectController extends Controller
         }
     }
 
+    // 📌 Truy cập project bằng mã
+    public function access(Request $request)
+    {
+        $code = $request->query('code');
+        
+        $project = Project::where('project_code', $code)->first();
+
+        if (!$project) {
+            return back()->with('error', 'Mã dự án không tồn tại!');
+        }
+
+        // Check xem user có trong project không
+        if (!$project->users->contains(Auth::id())) {
+            return back()->with('error', 'Bạn không có quyền truy cập dự án này!');
+        }
+
+        return redirect()->route('projects.show', $project->id);
+    }
+
     // 📌 Chi tiết project
     public function show($id)
     {
