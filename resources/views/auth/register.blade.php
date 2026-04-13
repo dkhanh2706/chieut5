@@ -4,7 +4,7 @@
 
 @section('content')
 <div class="container-main">
-    <div class="auth-container">
+    <div style="width: 100%; max-width: 500px;">
         <div class="card">
             <div class="card-body p-5">
                 <div class="text-center mb-4">

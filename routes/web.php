@@ -3,32 +3,58 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ProjectController;
 
-// Public routes
+// ================= PUBLIC =================
 Route::get('/', function () {
-    return redirect()->route('login');
+    return view('dashboard.index');
 })->name('home');
 
-// Authentication routes
+// ================= AUTH =================
 Route::middleware('guest')->group(function () {
-    // Login routes
+
     Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
     Route::post('/login', [AuthController::class, 'login'])->name('login.store');
 
-    // Registration routes
     Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
     Route::post('/register', [AuthController::class, 'register'])->name('register.store');
 
-    // Forgot password routes
     Route::get('/forgot-password', [AuthController::class, 'showForgotPassword'])->name('password.request');
     Route::post('/forgot-password', [AuthController::class, 'sendResetLink'])->name('password.email');
 });
 
-// Protected routes (require authentication)
+// ================= PROTECTED =================
 Route::middleware('auth')->group(function () {
-    // Dashboard routes
+
+    // Dashboard
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-    // Logout route
+    // ================= PROJECT =================
+    Route::get('/projects', [ProjectController::class, 'index'])->name('projects.index');
+    Route::get('/projects/create', [ProjectController::class, 'create'])->name('projects.create');
+    Route::post('/projects', [ProjectController::class, 'store'])->name('projects.store');
+
+    // 🔥 CHI TIẾT PROJECT (QUAN TRỌNG)
+    Route::get('/projects/{id}', [ProjectController::class, 'show'])->name('projects.show');
+
+    // 🔥 ADD MEMBER
+    Route::post('/projects/{id}/add-member', [ProjectController::class, 'addMember'])->name('projects.addMember');
+
+    // (sắp tới dùng)
+     Route::post('/projects/{id}/tasks', [ProjectController::class, 'addTask'])->name('projects.addTask');
+
+    // Logout
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 });
+
+Route::delete('/tasks/{id}', [ProjectController::class, 'deleteTask'])->name('tasks.delete');
+Route::get('/projects/{id}/trash', [ProjectController::class, 'trash'])
+    ->name('projects.trash');
+
+
+
+    Route::post('/tasks/{id}/restore', [ProjectController::class, 'restoreTask'])
+    ->name('tasks.restore');
+
+Route::delete('/tasks/{id}/force-delete', [ProjectController::class, 'forceDeleteTask'])
+    ->name('tasks.forceDelete');
