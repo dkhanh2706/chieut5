@@ -29,6 +29,9 @@ Route::middleware('auth')->group(function () {
     // Dashboard
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
+    // 🔥 Lịch trình dự án
+    Route::get('/projects/calendar', [ProjectController::class, 'calendar'])->name('projects.calendar');
+
     // ================= PROJECT =================
     Route::get('/projects', [ProjectController::class, 'index'])->name('projects.index');
     Route::get('/projects/create', [ProjectController::class, 'create'])->name('projects.create');

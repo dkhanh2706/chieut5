@@ -17,6 +17,13 @@ class ProjectController extends Controller
         return view('projects.index', compact('projects'));
     }
 
+    // 📌 Lịch trình dự án (calendar view)
+    public function calendar()
+    {
+        $projects = Auth::user()->projects()->with('users')->get();
+        return view('projects.calendar', compact('projects'));
+    }
+
     // 📌 Trang tạo project
     public function create()
     {

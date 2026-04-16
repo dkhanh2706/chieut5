@@ -323,10 +323,11 @@
         <div class="col-lg-6">
             <div class="quick-actions">
                 <h3><i class="fas fa-bolt me-2" style="color: #f59e0b;"></i>Truy cập nhanh</h3>
-                <a href="{{ route('projects.index') }}" class="quick-link">
-                    <i class="fas fa-folder-tree"></i>
-                    <span>Danh sách dự án</span>
+                <a href="{{ route('projects.calendar') }}" class="quick-link">
+                    <i class="fas fa-calendar"></i>
+                    <span>Lịch trình dự án</span>
                 </a>
+                <a href="{{ route('projects.index') }}" class="quick-link">
                 <a href="#" class="quick-link">
                     <i class="fas fa-chart-line"></i>
                     <span>Thống kê</span>

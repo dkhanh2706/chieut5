@@ -229,6 +229,10 @@
         <i class="fas fa-plus me-2"></i>Tạo dự án mới
     </a>
 
+    <a href="{{ route('projects.calendar') }}" class="btn btn-outline-primary mb-4 ms-2">
+        <i class="fas fa-calendar me-2"></i>Lịch trình
+    </a>
+
     @if($projects->count() > 0)
         <div class="row g-4">
             @foreach($projects as $p)
