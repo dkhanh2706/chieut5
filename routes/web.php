@@ -46,6 +46,18 @@ Route::middleware('auth')->group(function () {
     // (sắp tới dùng)
      Route::post('/projects/{id}/tasks', [ProjectController::class, 'addTask'])->name('projects.addTask');
 
+    // 🔥 Kanban Board
+    Route::get('/projects/{id}/kanban', [ProjectController::class, 'kanban'])->name('projects.kanban');
+
+    // 🔥 Lịch trình công việc
+    Route::get('/projects/{id}/schedule', [ProjectController::class, 'schedule'])->name('projects.schedule');
+
+    // 🔥 Thành viên
+    Route::get('/projects/{id}/members', [ProjectController::class, 'members'])->name('projects.members');
+
+    // 🔥 Cập nhật status task
+    Route::put('/tasks/{id}/status', [ProjectController::class, 'updateTaskStatus'])->name('tasks.updateStatus');
+
     // Logout
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 });

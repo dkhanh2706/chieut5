@@ -264,17 +264,17 @@
                 </a>
             </li>
             <li>
-                <a href="#">
+                <a href="{{ route('projects.kanban', $project->id) }}" class="{{ request()->is('*/kanban*') ? 'active' : '' }}">
                     <i class="fas fa-list-check"></i> Công việc
                 </a>
             </li>
             <li>
-                <a href="#">
+                <a href="{{ route('projects.members', $project->id) }}" class="{{ request()->is('*/members*') ? 'active' : '' }}">
                     <i class="fas fa-users"></i> Thành viên
                 </a>
             </li>
             <li>
-                <a href="#">
+                <a href="{{ route('projects.schedule', $project->id) }}" class="{{ request()->is('*/schedule*') ? 'active' : '' }}">
                     <i class="fas fa-calendar"></i> Lịch trình
                 </a>
             </li>

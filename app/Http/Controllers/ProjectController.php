@@ -146,6 +146,64 @@ class ProjectController extends Controller
         ));
     }
 
+    // 📌 Kanban Board
+    public function kanban($id)
+    {
+        $project = Project::with(['users', 'tasks' => function($q) {
+            $q->orderBy('start_date', 'asc');
+        }])->findOrFail($id);
+
+        $this->checkAccess($project);
+
+        $leader = User::find($project->leader);
+
+        $tasksByStatus = [
+            'Chưa làm' => $project->tasks->where('status', 'Chưa làm')->sortBy('start_date'),
+            'Đang làm' => $project->tasks->where('status', 'Đang làm')->sortBy('start_date'),
+            'Hoàn thành' => $project->tasks->where('status', 'Hoàn thành')->sortBy('start_date'),
+        ];
+
+        return view('projects.kanban', compact('project', 'leader', 'tasksByStatus'));
+    }
+
+    // 📌 Cập nhật status task (drag & drop)
+    public function updateTaskStatus(Request $request, $id)
+    {
+        $task = Task::findOrFail($id);
+        $project = Project::with('users')->findOrFail($task->project_id);
+        $this->checkAccess($project);
+
+        $task->update(['status' => $request->status]);
+
+        return response()->json(['success' => true]);
+    }
+
+    // 📌 Lịch trình công việc
+    public function schedule($id)
+    {
+        $project = Project::with(['users', 'tasks' => function($q) {
+            $q->whereNotNull('start_date')
+              ->orWhereNotNull('end_date');
+        }])->findOrFail($id);
+
+        $this->checkAccess($project);
+
+        $leader = User::find($project->leader);
+
+        return view('projects.schedule', compact('project', 'leader'));
+    }
+
+    // 📌 Thành viên
+    public function members($id)
+    {
+        $project = Project::with('users')->findOrFail($id);
+        $this->checkAccess($project);
+
+        $leader = User::find($project->leader);
+
+        return view('projects.members', compact('project', 'leader'));
+    }
+
     // 📌 THÊM TASK
     public function addTask(Request $request, $id)
     {
