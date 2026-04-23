@@ -124,14 +124,6 @@
         box-shadow: 0 2px 8px rgba(99, 102, 241, 0.3);
     }
 
-    .project-event.start-event {
-        background: linear-gradient(135deg, #10b981 0%, #34d399 100%);
-    }
-
-    .project-event.end-event {
-        background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%);
-    }
-
     .project-event.status-done {
         background: linear-gradient(135deg, #64748b 0%, #94a3b8 100%);
     }
@@ -142,6 +134,14 @@
 
     .project-event.status-progress {
         background: linear-gradient(135deg, #0ea5e9 0%, #38bdf8 100%);
+    }
+
+    .project-event.start-event {
+        background: linear-gradient(135deg, #10b981 0%, #34d399 100%);
+    }
+
+    .project-event.end-event {
+        background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%);
     }
 
     .empty-state {

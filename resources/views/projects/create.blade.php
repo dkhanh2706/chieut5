@@ -129,7 +129,7 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label>Ngày kết thúc</label>
+                                    <label>Ước lượng ngày kết thúc</label>
                                     <input type="date" name="end_date" class="form-control" 
                                            value="{{ old('end_date') }}" required>
                                 </div>
@@ -142,7 +142,6 @@
                                 <option value="">-- Chọn trạng thái --</option>
                                 <option value="Chưa bắt đầu" {{ old('status') == 'Chưa bắt đầu' ? 'selected' : '' }}>Chưa bắt đầu</option>
                                 <option value="Đang làm" {{ old('status') == 'Đang làm' ? 'selected' : '' }}>Đang làm</option>
-                                <option value="Hoàn thành" {{ old('status') == 'Hoàn thành' ? 'selected' : '' }}>Hoàn thành</option>
                             </select>
                         </div>
 
